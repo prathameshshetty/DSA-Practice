@@ -1,45 +1,35 @@
 class Solution {
 public:
-    int solve(int i,int j,vector<vector<char>>&matrix,vector<vector<int>>& dp)
-    {
-        int m=matrix.size();
-        int n=matrix[0].size();
-
-        if(i>=m || j>=n)
-        {
-            return 0;
-        }
-        if(matrix[i][j]=='0') return 0;
-
-        if(dp[i][j]!=-1) return dp[i][j];
-        //now chec in all the remaining 3 directiosn
-        int right=solve(i,j+1,matrix,dp);
-        int diag=solve(i+1,j+1,matrix,dp);
-        int down=solve(i+1,j,matrix,dp);
-
-        return dp[i][j]=1+min({right,diag,down});
-    }
-
-
-
     int maximalSquare(vector<vector<char>>& matrix) {
+        //now its time for bottom up
+
         int m=matrix.size();
         int n=matrix[0].size();
-        int res=0;
-
+        int ans=0;
         vector<vector<int>> dp(m,vector<int>(n,-1));
-
         for(int i=0;i<m;i++)
         {
             for(int j=0;j<n;j++)
             {
-                if(matrix[i][j]=='1')
+                int num=matrix[i][j]=='0'?0:1;
+
+                if(i==0 || j==0)
                 {
-                    res=max(res,solve(i,j,matrix,dp));
+                    
+                    dp[i][j]=num;
                 }
+                else{
+                    if(num==1)
+                    {
+                        dp[i][j]=1+min({dp[i-1][j],dp[i-1][j-1],dp[i][j-1]});
+                    }
+                    else dp[i][j]=0;
+                }
+
+                ans=max(ans,dp[i][j]);
             }
         }
 
-        return res*res;
+        return ans*ans;
     }
 };
