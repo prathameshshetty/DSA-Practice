@@ -1,44 +1,19 @@
 class Solution {
 public:
     int closestTarget(vector<string>& words, string target, int startIndex) {
-        int leftCnt=0,rightCnt=0;
         int n=words.size();
-
-        bool flag=false;
-
-        if(words[startIndex]==target) return 0;
-        //LeftSide
-
-        int l=startIndex;
-        while(true)
+        int ans=INT_MAX;
+        for(int i=0;i<n;i++)
         {
-            l=(n+(l-1))%n;
-            leftCnt++;
-            if(words[l]==target)
+            if(words[i]==target)
             {
-                flag=true;
-                break;
+                //dist between two points in a cricle
+                int distance=abs(startIndex-i);
+                distance=min(distance,n-distance);
+                ans=min(ans,distance);
             }
-            if(startIndex==l) break;
-            
-        }
-        if(flag ==false) return -1;
-        //Right Side
-        int r=startIndex;
-        while(true)
-        {
-            r=(r+1)%n;
-            rightCnt++;
-            if(words[r]==target)
-            {
-                break;
-            }
-            if(startIndex==r) break;
         }
 
-
-        if(flag==false) return -1;
-
-        return min(leftCnt,rightCnt);
+        return ans==INT_MAX? -1:ans;
     }
 };
